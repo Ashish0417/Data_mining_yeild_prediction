@@ -1,0 +1,137 @@
+EUROPEAN CLIMATE ASSESSMENT & DATASET (ECA&D), file created on 23-03-2026
+THESE DATA CAN BE USED FREELY PROVIDED THAT THE FOLLOWING SOURCE IS ACKNOWLEDGED:
+
+Klein Tank, A.M.G. and Coauthors, 2002. Daily dataset of 20th-century surface
+air temperature and precipitation series for the European Climate Assessment.
+Int. J. of Climatol., 22, 1441-1453.
+Data and metadata available at http://www.ecad.eu
+
+FILE FORMAT (MISSING VALUE CODE IS -9999):
+
+ 01- 05 STAID  : Station identifier
+ 07- 12 SOUID  : Source identifier
+ 14- 53 SOUNAME: Source name
+ 55- 56 CN     : Country code (ISO3116 country codes)
+ 58- 66 LAT    : Latitude in degrees:minutes:seconds (+: North, -: South)
+ 68- 77 LON    : Longitude in degrees:minutes:seconds (+: East, -: West)
+ 79- 82 HGTH   : Station elevation in meters
+ 84- 87 ELEI   : Element identifier (see website at Daily Data > Data dictionary > Elements)
+ 89- 96 BEGIN  : Begin date YYYYMMDD
+ 98-105 END    : End date YYYYMMDD
+107-111 PARID  : Participant identifier
+113-163 PARNAME: Participant name
+
+STAID, SOUID,SOUNAME                                 ,CN,      LAT,       LON,HGHT,ELEI,   BEGIN,     END,PARID,PARNAME
+
+   64,116411,BUDAPEST BELTERULET                     ,HU,+47:30:40,+019:01:41, 152,TN11,19010101,20260228,   13,Monika Lakatos                                    
+  852,152438,DEBRECEN                                ,HU,+47:29:25,+021:36:39, 107,TN11,19010101,20201231,   13,Monika Lakatos                                    
+  852,912882,DEBRECEN                                ,HU,+47:29:00,+021:36:00, 109, TN6,19820113,20240502,     ,                    
+  852,259440,DEBRECEN REPULOTER                      ,HU,+47:29:04,+021:36:20, 107, TN2,20161016,20260228,   13,Monika Lakatos                                    
+  852,259519,DEBRECEN KISMACS                        ,HU,+47:34:36,+021:34:57, 125, TN2,20200131,20260228,   13,Monika Lakatos                                    
+  849,152443,POGANY                                  ,HU,+45:59:42,+018:14:06, 199,TN11,19010101,20201231,   13,Monika Lakatos                                    
+  849,912942,PECS/POGANY                             ,HU,+46:00:00,+018:14:00, 203, TN6,19820113,20240422,     ,                    
+  849,259055,POGANY                                  ,HU,+45:59:42,+018:14:06, 199, TN2,20040401,20220527,   13,Monika Lakatos                                    
+  849,259605,POGANY REPULOTER                        ,HU,+45:59:42,+018:14:06, 196, TN2,20210702,20260228,   13,Monika Lakatos                                    
+  851,152448,SZEGED KULTERULET                       ,HU,+46:15:22,+020:05:26,  81,TN11,19010101,20201231,   13,Monika Lakatos                                    
+  851,912982,SZEGED                                  ,HU,+46:15:00,+020:06:00,  83, TN6,19820113,20240502,     ,                    
+  851,259492,SZEGED KULTERULET                       ,HU,+46:15:22,+020:05:26,  81, TN2,20191201,20260228,   13,Monika Lakatos                                    
+ 2042,152453,SZOMBATHELY                             ,HU,+47:11:54,+016:38:52, 200,TN11,19010101,20260228,   13,Monika Lakatos                                    
+ 2042,912812,SZOMBATHELY                             ,HU,+47:16:00,+016:38:00, 221, TN6,19820113,20230929,     ,                    
+26562,116411,BUDAPEST BELTERULET                     ,HU,+47:30:40,+019:01:41, 152,TN11,19010101,20260228,   13,Monika Lakatos                                    
+26562,258795,BUDAPEST LAGYMANYOS                     ,HU,+47:28:29,+019:03:43, 145, TN2,20020101,20260228,   13,Monika Lakatos                                    
+26574,152448,SZEGED KULTERULET                       ,HU,+46:15:22,+020:05:26,  81,TN11,19010101,20201231,   13,Monika Lakatos                                    
+26574,912982,SZEGED                                  ,HU,+46:15:00,+020:06:00,  83, TN6,19820113,20240502,     ,                    
+26574,258920,SZEGED BELTERULET                       ,HU,+46:14:50,+020:08:26, 104, TN2,20020101,20260228,   13,Monika Lakatos                                    
+26574,259492,SZEGED KULTERULET                       ,HU,+46:15:22,+020:05:26,  81, TN2,20191201,20260228,   13,Monika Lakatos                                    
+26634,152438,DEBRECEN                                ,HU,+47:29:25,+021:36:39, 107,TN11,19010101,20201231,   13,Monika Lakatos                                    
+26634,912882,DEBRECEN                                ,HU,+47:29:00,+021:36:00, 109, TN6,19820113,20240502,     ,                    
+26634,259440,DEBRECEN REPULOTER                      ,HU,+47:29:04,+021:36:20, 107, TN2,20161016,20260228,   13,Monika Lakatos                                    
+26634,259519,DEBRECEN KISMACS                        ,HU,+47:34:36,+021:34:57, 125, TN2,20200131,20260228,   13,Monika Lakatos                                    
+26642,152438,DEBRECEN                                ,HU,+47:29:25,+021:36:39, 107,TN11,19010101,20201231,   13,Monika Lakatos                                    
+26642,912882,DEBRECEN                                ,HU,+47:29:00,+021:36:00, 109, TN6,19820113,20240502,     ,                    
+26642,259440,DEBRECEN REPULOTER                      ,HU,+47:29:04,+021:36:20, 107, TN2,20161016,20260228,   13,Monika Lakatos                                    
+26642,259519,DEBRECEN KISMACS                        ,HU,+47:34:36,+021:34:57, 125, TN2,20200131,20260228,   13,Monika Lakatos                                    
+26652,152443,POGANY                                  ,HU,+45:59:42,+018:14:06, 199,TN11,19010101,20201231,   13,Monika Lakatos                                    
+26652,912942,PECS/POGANY                             ,HU,+46:00:00,+018:14:00, 203, TN6,19820113,20240422,     ,                    
+26652,259055,POGANY                                  ,HU,+45:59:42,+018:14:06, 199, TN2,20040401,20220527,   13,Monika Lakatos                                    
+26652,259605,POGANY REPULOTER                        ,HU,+45:59:42,+018:14:06, 196, TN2,20210702,20260228,   13,Monika Lakatos                                    
+   64,116412,BUDAPEST BELTERULET                     ,HU,+47:30:40,+019:01:41, 152,TX12,19010101,20260228,   13,Monika Lakatos                                    
+  852,152439,DEBRECEN                                ,HU,+47:29:25,+021:36:39, 107,TX12,19010101,20201231,   13,Monika Lakatos                                    
+  852,259442,DEBRECEN REPULOTER                      ,HU,+47:29:04,+021:36:20, 107, TX2,20161016,20260228,   13,Monika Lakatos                                    
+  852,259521,DEBRECEN KISMACS                        ,HU,+47:34:36,+021:34:57, 125, TX2,20200131,20260228,   13,Monika Lakatos                                    
+  849,152444,POGANY                                  ,HU,+45:59:42,+018:14:06, 199,TX12,19010101,20201231,   13,Monika Lakatos                                    
+  849,259057,POGANY                                  ,HU,+45:59:42,+018:14:06, 199, TX2,20040401,20220527,   13,Monika Lakatos                                    
+  849,259607,POGANY REPULOTER                        ,HU,+45:59:42,+018:14:06, 196, TX2,20210702,20260228,   13,Monika Lakatos                                    
+  851,152449,SZEGED KULTERULET                       ,HU,+46:15:22,+020:05:26,  81,TX12,19010101,20201231,   13,Monika Lakatos                                    
+  851,259494,SZEGED KULTERULET                       ,HU,+46:15:22,+020:05:26,  81, TX2,20191201,20260228,   13,Monika Lakatos                                    
+ 2042,152454,SZOMBATHELY                             ,HU,+47:11:54,+016:38:52, 200,TX12,19010101,20260228,   13,Monika Lakatos                                    
+ 2042,258333,SZOMBATHELY                             ,HU,+47:11:54,+016:38:52, 200, TX2,20020101,20020423,   13,Monika Lakatos                                    
+26562,116412,BUDAPEST BELTERULET                     ,HU,+47:30:40,+019:01:41, 152,TX12,19010101,20260228,   13,Monika Lakatos                                    
+26562,258797,BUDAPEST LAGYMANYOS                     ,HU,+47:28:29,+019:03:43, 145, TX2,20020101,20260228,   13,Monika Lakatos                                    
+26574,152449,SZEGED KULTERULET                       ,HU,+46:15:22,+020:05:26,  81,TX12,19010101,20201231,   13,Monika Lakatos                                    
+26574,258922,SZEGED BELTERULET                       ,HU,+46:14:50,+020:08:26, 104, TX2,20020101,20260228,   13,Monika Lakatos                                    
+26574,259494,SZEGED KULTERULET                       ,HU,+46:15:22,+020:05:26,  81, TX2,20191201,20260228,   13,Monika Lakatos                                    
+26634,152439,DEBRECEN                                ,HU,+47:29:25,+021:36:39, 107,TX12,19010101,20201231,   13,Monika Lakatos                                    
+26634,259442,DEBRECEN REPULOTER                      ,HU,+47:29:04,+021:36:20, 107, TX2,20161016,20260228,   13,Monika Lakatos                                    
+26634,259521,DEBRECEN KISMACS                        ,HU,+47:34:36,+021:34:57, 125, TX2,20200131,20260228,   13,Monika Lakatos                                    
+26642,152439,DEBRECEN                                ,HU,+47:29:25,+021:36:39, 107,TX12,19010101,20201231,   13,Monika Lakatos                                    
+26642,259442,DEBRECEN REPULOTER                      ,HU,+47:29:04,+021:36:20, 107, TX2,20161016,20260228,   13,Monika Lakatos                                    
+26642,259521,DEBRECEN KISMACS                        ,HU,+47:34:36,+021:34:57, 125, TX2,20200131,20260228,   13,Monika Lakatos                                    
+26652,152444,POGANY                                  ,HU,+45:59:42,+018:14:06, 199,TX12,19010101,20201231,   13,Monika Lakatos                                    
+26652,259057,POGANY                                  ,HU,+45:59:42,+018:14:06, 199, TX2,20040401,20220527,   13,Monika Lakatos                                    
+26652,259607,POGANY REPULOTER                        ,HU,+45:59:42,+018:14:06, 196, TX2,20210702,20260228,   13,Monika Lakatos                                    
+   64,100246,BUDAPEST BELTERULET                     ,HU,+47:30:40,+019:01:41, 152,TG13,19010101,20260228,   13,Monika Lakatos                                    
+  852,152437,DEBRECEN                                ,HU,+47:29:25,+021:36:39, 107,TG13,19010101,20201231,   13,Monika Lakatos                                    
+  852,912882,DEBRECEN                                ,HU,+47:29:00,+021:36:00, 109, TG5,19820113,20240501,     ,                    
+  852,259441,DEBRECEN REPULOTER                      ,HU,+47:29:04,+021:36:20, 107, TG3,20161016,20260228,   13,Monika Lakatos                                    
+  852,259520,DEBRECEN KISMACS                        ,HU,+47:34:36,+021:34:57, 125, TG3,20200131,20260228,   13,Monika Lakatos                                    
+  849,152442,POGANY                                  ,HU,+45:59:42,+018:14:06, 199,TG13,19010101,20201231,   13,Monika Lakatos                                    
+  849,912942,PECS/POGANY                             ,HU,+46:00:00,+018:14:00, 203, TG5,19820113,20240422,     ,                    
+  849,259056,POGANY                                  ,HU,+45:59:42,+018:14:06, 199, TG3,20040401,20220527,   13,Monika Lakatos                                    
+  849,259606,POGANY REPULOTER                        ,HU,+45:59:42,+018:14:06, 196, TG3,20210702,20260228,   13,Monika Lakatos                                    
+  851,152447,SZEGED KULTERULET                       ,HU,+46:15:22,+020:05:26,  81,TG13,19010101,20201231,   13,Monika Lakatos                                    
+  851,912982,SZEGED                                  ,HU,+46:15:00,+020:06:00,  83, TG5,19820113,20240501,     ,                    
+  851,259493,SZEGED KULTERULET                       ,HU,+46:15:22,+020:05:26,  81, TG3,20191201,20260228,   13,Monika Lakatos                                    
+ 2042,152452,SZOMBATHELY                             ,HU,+47:11:54,+016:38:52, 200,TG13,19010101,20260228,   13,Monika Lakatos                                    
+ 2042,912812,SZOMBATHELY                             ,HU,+47:16:00,+016:38:00, 221, TG5,19820113,20230928,     ,                    
+26562,100246,BUDAPEST BELTERULET                     ,HU,+47:30:40,+019:01:41, 152,TG13,19010101,20260228,   13,Monika Lakatos                                    
+26562,258796,BUDAPEST LAGYMANYOS                     ,HU,+47:28:29,+019:03:43, 145, TG3,20020101,20260228,   13,Monika Lakatos                                    
+26574,152447,SZEGED KULTERULET                       ,HU,+46:15:22,+020:05:26,  81,TG13,19010101,20201231,   13,Monika Lakatos                                    
+26574,912982,SZEGED                                  ,HU,+46:15:00,+020:06:00,  83, TG5,19820113,20240501,     ,                    
+26574,258921,SZEGED BELTERULET                       ,HU,+46:14:50,+020:08:26, 104, TG3,20020101,20260228,   13,Monika Lakatos                                    
+26574,259493,SZEGED KULTERULET                       ,HU,+46:15:22,+020:05:26,  81, TG3,20191201,20260228,   13,Monika Lakatos                                    
+26634,152437,DEBRECEN                                ,HU,+47:29:25,+021:36:39, 107,TG13,19010101,20201231,   13,Monika Lakatos                                    
+26634,912882,DEBRECEN                                ,HU,+47:29:00,+021:36:00, 109, TG5,19820113,20240501,     ,                    
+26634,259441,DEBRECEN REPULOTER                      ,HU,+47:29:04,+021:36:20, 107, TG3,20161016,20260228,   13,Monika Lakatos                                    
+26634,259520,DEBRECEN KISMACS                        ,HU,+47:34:36,+021:34:57, 125, TG3,20200131,20260228,   13,Monika Lakatos                                    
+26642,152437,DEBRECEN                                ,HU,+47:29:25,+021:36:39, 107,TG13,19010101,20201231,   13,Monika Lakatos                                    
+26642,912882,DEBRECEN                                ,HU,+47:29:00,+021:36:00, 109, TG5,19820113,20240501,     ,                    
+26642,259441,DEBRECEN REPULOTER                      ,HU,+47:29:04,+021:36:20, 107, TG3,20161016,20260228,   13,Monika Lakatos                                    
+26642,259520,DEBRECEN KISMACS                        ,HU,+47:34:36,+021:34:57, 125, TG3,20200131,20260228,   13,Monika Lakatos                                    
+26652,152442,POGANY                                  ,HU,+45:59:42,+018:14:06, 199,TG13,19010101,20201231,   13,Monika Lakatos                                    
+26652,912942,PECS/POGANY                             ,HU,+46:00:00,+018:14:00, 203, TG5,19820113,20240422,     ,                    
+26652,259056,POGANY                                  ,HU,+45:59:42,+018:14:06, 199, TG3,20040401,20220527,   13,Monika Lakatos                                    
+26652,259606,POGANY REPULOTER                        ,HU,+45:59:42,+018:14:06, 196, TG3,20210702,20260228,   13,Monika Lakatos                                    
+   64,100247,BUDAPEST BELTERULET                     ,HU,+47:30:40,+019:01:41, 152, RR3,19010101,20260228,   13,Monika Lakatos                                    
+  852,152440,DEBRECEN                                ,HU,+47:29:25,+021:36:39, 107, RR3,19010101,20201231,   13,Monika Lakatos                                    
+  852,259443,DEBRECEN REPULOTER                      ,HU,+47:29:04,+021:36:20, 107, RR9,20161111,20260228,   13,Monika Lakatos                                    
+  849,152445,POGANY                                  ,HU,+45:59:42,+018:14:06, 199, RR3,19010101,20201231,   13,Monika Lakatos                                    
+  849,259058,POGANY                                  ,HU,+45:59:42,+018:14:06, 199, RR9,20040401,20220110,   13,Monika Lakatos                                    
+  849,259608,POGANY REPULOTER                        ,HU,+45:59:42,+018:14:06, 196, RR9,20210702,20260228,   13,Monika Lakatos                                    
+  851,152450,SZEGED KULTERULET                       ,HU,+46:15:22,+020:05:26,  81, RR3,19010101,20201231,   13,Monika Lakatos                                    
+  851,259495,SZEGED KULTERULET                       ,HU,+46:15:22,+020:05:26,  81, RR9,20191201,20260228,   13,Monika Lakatos                                    
+ 2042,152455,SZOMBATHELY                             ,HU,+47:11:54,+016:38:52, 200, RR3,19010101,20260228,   13,Monika Lakatos                                    
+ 2042,258334,SZOMBATHELY                             ,HU,+47:11:54,+016:38:52, 200, RR9,20020101,20020423,   13,Monika Lakatos                                    
+26562,100247,BUDAPEST BELTERULET                     ,HU,+47:30:40,+019:01:41, 152, RR3,19010101,20260228,   13,Monika Lakatos                                    
+26562,258798,BUDAPEST LAGYMANYOS                     ,HU,+47:28:29,+019:03:43, 145, RR9,20020101,20260228,   13,Monika Lakatos                                    
+26574,152450,SZEGED KULTERULET                       ,HU,+46:15:22,+020:05:26,  81, RR3,19010101,20201231,   13,Monika Lakatos                                    
+26574,258923,SZEGED BELTERULET                       ,HU,+46:14:50,+020:08:26, 104, RR9,20020101,20260228,   13,Monika Lakatos                                    
+26574,259495,SZEGED KULTERULET                       ,HU,+46:15:22,+020:05:26,  81, RR9,20191201,20260228,   13,Monika Lakatos                                    
+26634,152440,DEBRECEN                                ,HU,+47:29:25,+021:36:39, 107, RR3,19010101,20201231,   13,Monika Lakatos                                    
+26634,259443,DEBRECEN REPULOTER                      ,HU,+47:29:04,+021:36:20, 107, RR9,20161111,20260228,   13,Monika Lakatos                                    
+26642,152440,DEBRECEN                                ,HU,+47:29:25,+021:36:39, 107, RR3,19010101,20201231,   13,Monika Lakatos                                    
+26642,259443,DEBRECEN REPULOTER                      ,HU,+47:29:04,+021:36:20, 107, RR9,20161111,20260228,   13,Monika Lakatos                                    
+26642,259522,DEBRECEN KISMACS                        ,HU,+47:34:36,+021:34:57, 125, RR9,20200131,20260228,   13,Monika Lakatos                                    
+26652,152445,POGANY                                  ,HU,+45:59:42,+018:14:06, 199, RR3,19010101,20201231,   13,Monika Lakatos                                    
+26652,259058,POGANY                                  ,HU,+45:59:42,+018:14:06, 199, RR9,20040401,20220110,   13,Monika Lakatos                                    
+26652,259608,POGANY REPULOTER                        ,HU,+45:59:42,+018:14:06, 196, RR9,20210702,20260228,   13,Monika Lakatos                                    
