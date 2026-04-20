@@ -48,6 +48,34 @@ class YieldPredictionOutput(BaseModel):
 class ModelTrainingMetrics(BaseModel):
     rmse: float
     mae: float
-    r2: float
+    r2_score: float
     algorithm: str
     version: str
+
+# System Management
+class YieldDataCreate(BaseModel):
+    country: str
+    state: Optional[str] = None
+    district: Optional[str] = None
+    region: Optional[str] = None
+    crop: str
+    year: int
+    avg_temp: float
+    rainfall: float
+    rain_days: int = 0
+    frost_days: int = 0
+    heat_days: int = 0
+    humidity: float = 0.0
+    sown_area: float
+    production: float
+
+class YieldDataOut(BaseModel):
+    fact_id: int
+    country: str
+    crop: str
+    year: int
+    sown_area: float
+    production: float
+    yield_value: float
+    is_deleted: bool
+    created_at: datetime
