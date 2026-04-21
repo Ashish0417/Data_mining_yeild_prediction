@@ -1,179 +1,235 @@
-import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
+import { useEffect, useMemo, useState } from 'react';
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Cell,
+  Legend,
+  Line,
+  LineChart,
+  Pie,
+  PieChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from 'recharts';
 import { TrendingUp } from 'lucide-react';
+import { apiClient } from '../services/api';
+import { useAuth } from '../context/AuthContext';
+import type { PredictionLog } from '../services/api';
 
-const yieldData = [
-  { month: 'Jan', yield: 4200, target: 4000 },
-  { month: 'Feb', yield: 4500, target: 4200 },
-  { month: 'Mar', yield: 4800, target: 4400 },
-  { month: 'Apr', yield: 5200, target: 4600 },
-  { month: 'May', yield: 5500, target: 4800 },
-  { month: 'Jun', yield: 5900, target: 5000 },
-];
+type Rule = {
+  lift: number;
+};
 
-const cropData = [
-  { name: 'Wheat', value: 35, fill: '#1e5631' },
-  { name: 'Corn', value: 30, fill: '#40916c' },
-  { name: 'Soybeans', value: 20, fill: '#52b788' },
-  { name: 'Others', value: 15, fill: '#d4f1d4' },
-];
+type Cluster = {
+  size: number;
+  yield_value: number;
+};
 
-const weatherData = [
-  { week: 'Week 1', temp: 18, humidity: 65, rainfall: 25 },
-  { week: 'Week 2', temp: 20, humidity: 60, rainfall: 30 },
-  { week: 'Week 3', temp: 22, humidity: 55, rainfall: 15 },
-  { week: 'Week 4', temp: 21, humidity: 58, rainfall: 40 },
-];
+const cropColors = ['#1e5631', '#40916c', '#52b788', '#95d5b2', '#d8f3dc'];
 
 export default function DashboardView() {
+  const { user } = useAuth();
+  const [history, setHistory] = useState<PredictionLog[]>([]);
+  const [modelCount, setModelCount] = useState(0);
+  const [rules, setRules] = useState<Rule[]>([]);
+  const [clusters, setClusters] = useState<Cluster[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+
+  const isAdmin = user?.role === 'ADMIN' || user?.role === 'SUPERUSER';
+
+  useEffect(() => {
+    const load = async () => {
+      setLoading(true);
+      setError('');
+      try {
+        const [predictionHistory, models] = await Promise.all([
+          apiClient.getPredictionHistory().catch(() => []),
+          apiClient.getUserModels().catch(() => []),
+        ]);
+
+        setHistory(Array.isArray(predictionHistory) ? predictionHistory : []);
+        setModelCount(Array.isArray(models) ? models.length : 0);
+
+        if (isAdmin) {
+          const [kmeans, apriori] = await Promise.all([
+            apiClient.getKMeansReport().catch(() => []),
+            apiClient.getAprioriReport().catch(() => []),
+          ]);
+          setClusters(Array.isArray(kmeans) ? kmeans : []);
+          setRules(Array.isArray(apriori) ? apriori : []);
+        }
+      } catch (err: any) {
+        setError(err?.response?.data?.detail || 'Failed to load dashboard data.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    load();
+  }, [isAdmin]);
+
+  const avgPredictedYield = useMemo(() => {
+    if (!history.length) return 0;
+    const total = history.reduce((sum, item) => sum + Number(item.predicted_yield || 0), 0);
+    return total / history.length;
+  }, [history]);
+
+  const weightedClusterYield = useMemo(() => {
+    if (!clusters.length) return 0;
+    const totalSize = clusters.reduce((sum, c) => sum + Number(c.size || 0), 0);
+    if (!totalSize) return 0;
+    const weighted = clusters.reduce(
+      (sum, c) => sum + Number(c.yield_value || 0) * Number(c.size || 0),
+      0,
+    );
+    return weighted / totalSize;
+  }, [clusters]);
+
+  const bestLift = useMemo(() => {
+    if (!rules.length) return 0;
+    return Math.max(...rules.map((r) => Number(r.lift || 0)));
+  }, [rules]);
+
+  const predictionTrend = useMemo(() => {
+    const sorted = [...history].sort((a, b) => {
+      const ta = new Date(a.timestamp).getTime();
+      const tb = new Date(b.timestamp).getTime();
+      return ta - tb;
+    });
+
+    return sorted.slice(-12).map((item) => ({
+      time: new Date(item.timestamp).toLocaleDateString(),
+      predicted_yield: Number(item.predicted_yield || 0),
+    }));
+  }, [history]);
+
+  const cropDistribution = useMemo(() => {
+    const map = new Map<string, number>();
+    history.forEach((item) => {
+      const crop = String(item.inputs_json?.crop || 'Unknown');
+      map.set(crop, (map.get(crop) || 0) + 1);
+    });
+
+    return Array.from(map.entries()).map(([name, value]) => ({ name, value }));
+  }, [history]);
+
+  const recentPredictions = useMemo(
+    () => [...history].sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()).slice(0, 5),
+    [history],
+  );
+
+  if (loading) {
+    return <div className="card">Loading dashboard data...</div>;
+  }
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-      {/* Stats */}
+      {error && <div className="warning-message">{error}</div>}
+
       <div className="grid grid-2">
         <div className="stat-box">
-          <div className="stat-label">Average Yield</div>
-          <div className="stat-value">5,167 kg/ha</div>
+          <div className="stat-label">Average Predicted Yield</div>
+          <div className="stat-value">{avgPredictedYield.toFixed(2)}</div>
           <div style={{ fontSize: '0.9rem', color: 'var(--color-success)', marginTop: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <TrendingUp size={16} /> +8.2% from last month
+            <TrendingUp size={16} /> Based on {history.length} predictions
           </div>
         </div>
 
         <div className="stat-box">
-          <div className="stat-label">Total Area Monitored</div>
-          <div className="stat-value">2,450 ha</div>
+          <div className="stat-label">Models Available</div>
+          <div className="stat-value">{modelCount}</div>
           <div style={{ fontSize: '0.9rem', color: 'var(--color-text-secondary)', marginTop: '0.5rem' }}>
-            Across 12 fields
+            Retrieved from active backend
           </div>
         </div>
 
         <div className="stat-box">
-          <div className="stat-label">Weather Status</div>
-          <div className="stat-value">Optimal</div>
+          <div className="stat-label">KMeans Weighted Yield</div>
+          <div className="stat-value">{isAdmin ? weightedClusterYield.toFixed(2) : 'N/A'}</div>
           <div style={{ fontSize: '0.9rem', color: 'var(--color-text-secondary)', marginTop: '0.5rem' }}>
-            Conditions favorable
+            {isAdmin ? `From ${clusters.length} clusters` : 'Admin report metric'}
           </div>
         </div>
 
         <div className="stat-box">
-          <div className="stat-label">Prediction Accuracy</div>
-          <div className="stat-value">94.2%</div>
+          <div className="stat-label">Best Apriori Lift</div>
+          <div className="stat-value">{isAdmin ? bestLift.toFixed(2) : 'N/A'}</div>
           <div style={{ fontSize: '0.9rem', color: 'var(--color-text-secondary)', marginTop: '0.5rem' }}>
-            Based on 50 predictions
+            {isAdmin ? `Across ${rules.length} rules` : 'Admin report metric'}
           </div>
         </div>
       </div>
 
-      {/* Yield Trend */}
       <div className="chart-container">
-        <h3 style={{ marginBottom: '1.5rem' }}>Yield Trend Analysis</h3>
-        <ResponsiveContainer width="100%" height={300}>
-          <LineChart data={yieldData}>
-            <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" />
-            <XAxis dataKey="month" stroke="var(--color-text-secondary)" />
-            <YAxis stroke="var(--color-text-secondary)" />
-            <Tooltip 
-              contentStyle={{ 
-                background: 'var(--color-surface)',
-                border: '1px solid var(--color-border)',
-                borderRadius: 'var(--radius)',
-              }}
-            />
-            <Legend />
-            <Line type="monotone" dataKey="yield" stroke="#1e5631" strokeWidth={2} name="Actual Yield" />
-            <Line type="monotone" dataKey="target" stroke="#40916c" strokeWidth={2} strokeDasharray="5 5" name="Target" />
-          </LineChart>
-        </ResponsiveContainer>
+        <h3 style={{ marginBottom: '1.5rem' }}>Prediction Trend</h3>
+        {predictionTrend.length === 0 ? (
+          <p>No prediction history available yet.</p>
+        ) : (
+          <ResponsiveContainer width="100%" height={300}>
+            <LineChart data={predictionTrend}>
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" />
+              <XAxis dataKey="time" stroke="var(--color-text-secondary)" />
+              <YAxis stroke="var(--color-text-secondary)" />
+              <Tooltip />
+              <Legend />
+              <Line type="monotone" dataKey="predicted_yield" stroke="#1e5631" strokeWidth={2} name="Predicted Yield" />
+            </LineChart>
+          </ResponsiveContainer>
+        )}
       </div>
 
-      {/* Crop Distribution & Weather */}
       <div className="grid grid-2">
         <div className="chart-container">
-          <h3 style={{ marginBottom: '1.5rem' }}>Crop Distribution</h3>
-          <ResponsiveContainer width="100%" height={300}>
-            <PieChart>
-              <Pie
-                data={cropData}
-                cx="50%"
-                cy="50%"
-                labelLine={false}
-                label={({ name, value }) => `${name} ${value}%`}
-                outerRadius={100}
-                fill="#8884d8"
-                dataKey="value"
-              >
-                {cropData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={entry.fill} />
-                ))}
-              </Pie>
-              <Tooltip 
-                contentStyle={{ 
-                  background: 'var(--color-surface)',
-                  border: '1px solid var(--color-border)',
-                  borderRadius: 'var(--radius)',
-                }}
-              />
-            </PieChart>
-          </ResponsiveContainer>
+          <h3 style={{ marginBottom: '1.5rem' }}>Prediction Crop Distribution</h3>
+          {cropDistribution.length === 0 ? (
+            <p>No crop distribution data yet.</p>
+          ) : (
+            <ResponsiveContainer width="100%" height={300}>
+              <PieChart>
+                <Pie
+                  data={cropDistribution}
+                  cx="50%"
+                  cy="50%"
+                  labelLine={false}
+                  label={({ name, value }) => `${name} ${value}`}
+                  outerRadius={100}
+                  dataKey="value"
+                >
+                  {cropDistribution.map((entry, index) => (
+                    <Cell key={`cell-${entry.name}`} fill={cropColors[index % cropColors.length]} />
+                  ))}
+                </Pie>
+                <Tooltip />
+              </PieChart>
+            </ResponsiveContainer>
+          )}
         </div>
 
         <div className="chart-container">
-          <h3 style={{ marginBottom: '1.5rem' }}>Weekly Weather Data</h3>
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={weatherData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" />
-              <XAxis dataKey="week" stroke="var(--color-text-secondary)" />
-              <YAxis stroke="var(--color-text-secondary)" />
-              <Tooltip 
-                contentStyle={{ 
-                  background: 'var(--color-surface)',
-                  border: '1px solid var(--color-border)',
-                  borderRadius: 'var(--radius)',
-                }}
-              />
-              <Legend />
-              <Bar dataKey="temp" fill="#1e5631" name="Temp (°C)" />
-              <Bar dataKey="humidity" fill="#40916c" name="Humidity (%)" />
-              <Bar dataKey="rainfall" fill="#52b788" name="Rainfall (mm)" />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
-      </div>
-
-      {/* Recent Activities */}
-      <div className="chart-container">
-        <h3 style={{ marginBottom: '1.5rem' }}>Recent Activities</h3>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-          {[
-            { time: 'Today, 2:30 PM', action: 'Uploaded new field data', status: 'completed' },
-            { time: 'Yesterday, 10:15 AM', action: 'Generated yield prediction', status: 'completed' },
-            { time: 'Yesterday, 8:45 AM', action: 'Weather alert: High humidity', status: 'alert' },
-            { time: '2 days ago, 3:20 PM', action: 'Field monitoring update', status: 'completed' },
-            { time: '3 days ago, 1:10 PM', action: 'Data validation completed', status: 'completed' },
-          ].map((activity, index) => (
-            <div key={index} style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              padding: '1rem',
-              background: 'var(--color-surface)',
-              borderRadius: 'var(--radius)',
-              borderLeft: `4px solid ${activity.status === 'alert' ? 'var(--color-warning)' : 'var(--color-success)'}`,
-            }}>
-              <div>
-                <div style={{ fontWeight: '500', color: 'var(--color-text)' }}>{activity.action}</div>
-                <div style={{ fontSize: '0.85rem', color: 'var(--color-text-secondary)' }}>{activity.time}</div>
-              </div>
-              <div style={{
-                padding: '0.25rem 0.75rem',
-                borderRadius: 'var(--radius)',
-                fontSize: '0.85rem',
-                fontWeight: '500',
-                background: activity.status === 'alert' ? 'rgba(247, 127, 0, 0.1)' : 'rgba(82, 183, 136, 0.1)',
-                color: activity.status === 'alert' ? 'var(--color-warning)' : 'var(--color-success)',
-              }}>
-                {activity.status === 'alert' ? 'Alert' : 'Completed'}
-              </div>
-            </div>
-          ))}
+          <h3 style={{ marginBottom: '1.5rem' }}>Latest 5 Predictions</h3>
+          {recentPredictions.length === 0 ? (
+            <p>No recent predictions available.</p>
+          ) : (
+            <ResponsiveContainer width="100%" height={300}>
+              <BarChart
+                data={recentPredictions.map((item, idx) => ({
+                  index: `P${idx + 1}`,
+                  value: Number(item.predicted_yield || 0),
+                }))}
+              >
+                <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" />
+                <XAxis dataKey="index" />
+                <YAxis />
+                <Tooltip />
+                <Legend />
+                <Bar dataKey="value" fill="#40916c" name="Predicted Yield" />
+              </BarChart>
+            </ResponsiveContainer>
+          )}
         </div>
       </div>
     </div>

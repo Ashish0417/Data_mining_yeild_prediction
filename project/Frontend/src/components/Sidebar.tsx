@@ -18,6 +18,9 @@ export default function Sidebar({ activeTab, setActiveTab }: SidebarProps) {
   const navItems = [
     { id: 'dashboard', label: 'Dashboard', icon: BarChart3 },
     { id: 'predict', label: 'Make Prediction', icon: PieChart },
+    ...(user?.role === 'ADMIN' || user?.role === 'SUPERUSER'
+      ? [{ id: 'reports', label: 'Mining Reports', icon: BarChart3 }]
+      : []),
     ...(user?.role === 'ADMIN' || user?.role === 'SUPERUSER' 
       ? [{ id: 'explorer', label: 'Data Explorer', icon: Database }] 
       : []),
