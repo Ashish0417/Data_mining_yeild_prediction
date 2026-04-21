@@ -99,6 +99,7 @@ class ModelRegistry(Base):
     model_path = Column(String(255))
     created_at = Column(TIMESTAMP, server_default=text("CURRENT_TIMESTAMP"))
     active = Column(Boolean, default=False)
+    crop_name = Column(String(100), default="All")
     
 class AggrCountryYearlyYield(Base):
     __tablename__ = "aggr_country_yearly_yield"

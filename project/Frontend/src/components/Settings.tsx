@@ -92,6 +92,7 @@ export default function Settings() {
               <thead>
                 <tr style={{ borderBottom: '2px solid var(--color-border)', textAlign: 'left', background: 'var(--color-surface)' }}>
                   <th style={{ padding: '1rem' }}>Active</th>
+                  <th style={{ padding: '1rem' }}>Crop</th>
                   <th style={{ padding: '1rem' }}>Algorithm</th>
                   <th style={{ padding: '1rem' }}>Version</th>
                   <th style={{ padding: '1rem' }}>R² Score</th>
@@ -107,6 +108,7 @@ export default function Settings() {
                       {m.active ? <span style={{ color: 'var(--color-success)', fontWeight: 'bold' }}>ACTIVE</span> : 
                         <button className="btn btn-secondary" style={{ padding: '0.2rem 0.5rem', fontSize: '0.8rem' }} onClick={() => handleActivateModel(m.model_id)}>Activate</button>}
                     </td>
+                    <td style={{ padding: '1rem' }}>{m.crop_name}</td>
                     <td style={{ padding: '1rem' }}>{m.algorithm}</td>
                     <td style={{ padding: '1rem', fontFamily: 'monospace' }}>{m.version}</td>
                     <td style={{ padding: '1rem', color: 'var(--color-success)' }}>{Number(m.r2_score).toFixed(4)}</td>

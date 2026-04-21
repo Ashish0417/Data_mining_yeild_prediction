@@ -30,6 +30,7 @@ export interface Token {
 export interface YieldPredictionInput {
   country: string;
   crop: string;
+  model_id?: number;
   year: number;
   avg_temp: number;
   rainfall: number;
@@ -38,6 +39,7 @@ export interface YieldPredictionInput {
   heat_days: number;
   humidity: number;
   sown_area: number;
+  production: number;
 }
 
 export interface YieldPredictionOutput {
@@ -113,6 +115,11 @@ class ApiClient {
 
   async getPredictionHistory(): Promise<PredictionLog[]> {
     const response = await this.client.get<PredictionLog[]>('/user/my-predictions');
+    return response.data;
+  }
+
+  async getUserModels(): Promise<any[]> {
+    const response = await this.client.get<any[]>('/user/models');
     return response.data;
   }
 

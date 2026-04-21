@@ -12,15 +12,21 @@ def trigger_retraining(background_tasks: BackgroundTasks,
                        db: Session = Depends(get_db)):
     
     def background_train(user_id):
+        import time
         from database import SessionLocal
         local_db = SessionLocal()
+        print(f"[ML PIPELINE] User {user_id} triggered model retraining. Initiating background loop...", flush=True)
         try:
+            start_time = time.time()
             res = pipeline.train_and_register_model(local_db, algorithm="all")
+            print(f"[ML PIPELINE] Training completed successfully in {time.time() - start_time:.2f} seconds. Details: {res}", flush=True)
             auth.log_audit(local_db, user_id, "ML Retraining Completed", details=res)
         except Exception as e:
+            print(f"[ML PIPELINE ERROR] ML Retraining Failed: {e}", flush=True)
             auth.log_audit(local_db, user_id, "ML Retraining Failed", details={"error": str(e)})
         finally:
             local_db.close()
+            print("[ML PIPELINE] Background loop concluded.", flush=True)
 
     background_tasks.add_task(background_train, current_user.user_id)
     auth.log_audit(db, current_user.user_id, "ML Retraining Triggered")
@@ -73,8 +79,8 @@ def get_models(current_user: models.User = Depends(auth.get_super_user), db: Ses
 def activate_model(model_id: int, current_user: models.User = Depends(auth.get_super_user), db: Session = Depends(get_db)):
     model = db.query(models.ModelRegistry).filter(models.ModelRegistry.model_id == model_id).first()
     if not model: raise HTTPException(status_code=404, detail="Model not found")
-    # Deactivate all others
-    db.query(models.ModelRegistry).update({models.ModelRegistry.active: False})
+    # Deactivate all others for same crop
+    db.query(models.ModelRegistry).filter(models.ModelRegistry.crop_name == model.crop_name).update({models.ModelRegistry.active: False})
     # Activate this
     model.active = True
     db.commit()

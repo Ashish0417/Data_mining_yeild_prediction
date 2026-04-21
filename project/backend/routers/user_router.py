@@ -19,3 +19,8 @@ def predict_crop_yield(input_data: schemas.YieldPredictionInput,
 def get_prediction_history(current_user: models.User = Depends(auth.get_current_user), db: Session = Depends(get_db)):
     logs = db.query(models.PredictionLog).filter(models.PredictionLog.user_id == current_user.user_id).order_by(models.PredictionLog.timestamp.desc()).limit(50).all()
     return logs
+
+@router.get("/models")
+def get_active_models(current_user: models.User = Depends(auth.get_current_user), db: Session = Depends(get_db)):
+    # Give user access to active models for each crop to choose from
+    return db.query(models.ModelRegistry).all()

@@ -31,6 +31,7 @@ class TokenData(BaseModel):
 class YieldPredictionInput(BaseModel):
     country: str = Field(..., description="Country name")
     crop: str = Field(..., description="Crop name")
+    model_id: Optional[int] = Field(None, description="Explict target learning model ID to employ")
     year: int = Field(..., ge=1900, le=2100)
     avg_temp: float = Field(..., description="Average Temperature")
     rainfall: float = Field(..., description="Annual Rainfall in mm")
@@ -39,6 +40,7 @@ class YieldPredictionInput(BaseModel):
     heat_days: int = Field(0, description="Number of heat days")
     humidity: float = Field(0.0, description="Humidity percentage")
     sown_area: float = Field(..., gt=0, description="Area sown in hectares")
+    production: float = Field(..., gt=0, description="Total production amount")
 
 class YieldPredictionOutput(BaseModel):
     predicted_yield: float

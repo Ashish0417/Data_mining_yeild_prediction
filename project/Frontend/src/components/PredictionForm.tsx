@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Send, AlertCircle } from 'lucide-react';
 import { apiClient } from '../services/api';
 import type { YieldPredictionInput, YieldPredictionOutput } from '../services/api';
@@ -6,6 +6,7 @@ import type { YieldPredictionInput, YieldPredictionOutput } from '../services/ap
 type PredictionFormState = {
   country: string;
   crop: string;
+  model_id: string;
   year: string;
   avg_temp: string;
   rainfall: string;
@@ -14,12 +15,14 @@ type PredictionFormState = {
   heat_days: string;
   humidity: string;
   sown_area: string;
+  production: string;
 };
 
 export default function PredictionForm() {
   const [formData, setFormData] = useState<PredictionFormState>({
     country: '',
-    crop: 'wheat',
+    crop: 'Maize',
+    model_id: '',
     year: String(new Date().getFullYear()),
     avg_temp: '',
     rainfall: '',
@@ -28,17 +31,23 @@ export default function PredictionForm() {
     heat_days: '',
     humidity: '',
     sown_area: '',
+    production: '',
   });
 
   const [prediction, setPrediction] = useState<YieldPredictionOutput | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [availableModels, setAvailableModels] = useState<any[]>([]);
+
+  useEffect(() => {
+    apiClient.getUserModels().then(models => setAvailableModels(models)).catch(() => { });
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ 
-      ...prev, 
-      [name]: value 
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
     }));
   };
 
@@ -49,7 +58,7 @@ export default function PredictionForm() {
     setLoading(true);
 
     try {
-      const requiredFields = ['country', 'crop', 'year', 'avg_temp', 'rainfall', 'sown_area'];
+      const requiredFields = ['country', 'crop', 'year', 'avg_temp', 'rainfall', 'sown_area', 'production'];
       for (const field of requiredFields) {
         if (!formData[field as keyof PredictionFormState]) {
           setError(`Please fill in ${field}`);
@@ -61,6 +70,7 @@ export default function PredictionForm() {
       const predictionData: YieldPredictionInput = {
         country: formData.country,
         crop: formData.crop,
+        model_id: formData.model_id ? parseInt(formData.model_id, 10) : undefined,
         year: parseInt(formData.year, 10),
         avg_temp: parseFloat(formData.avg_temp),
         rainfall: parseFloat(formData.rainfall),
@@ -69,6 +79,7 @@ export default function PredictionForm() {
         heat_days: parseInt(formData.heat_days || '0', 10),
         humidity: parseFloat(formData.humidity || '0'),
         sown_area: parseFloat(formData.sown_area),
+        production: parseFloat(formData.production),
       };
 
       const result = await apiClient.predictYield(predictionData);
@@ -80,8 +91,8 @@ export default function PredictionForm() {
     }
   };
 
-  const cropOptions = ['wheat', 'corn', 'soybeans', 'rice', 'potatoes', 'barley'];
-  const countryOptions = ['India', 'USA', 'China', 'Brazil', 'Australia', 'France'];
+  const cropOptions = ['Maize', 'Oats', 'Rye', 'Barley', 'potatoes', 'Rice'];
+  const countryOptions = ['India', 'USA', 'China', 'Hungary', 'Australia', 'France'];
 
   return (
     <div style={{ maxWidth: '900px' }}>
@@ -124,6 +135,25 @@ export default function PredictionForm() {
               {cropOptions.map(crop => (
                 <option key={crop} value={crop}>{crop.charAt(0).toUpperCase() + crop.slice(1)}</option>
               ))}
+            </select>
+          </div>
+
+          <div className="form-group">
+            <label>Prediction Target Framework</label>
+            <select
+              name="model_id"
+              value={formData.model_id}
+              onChange={handleChange}
+              disabled={loading}
+            >
+              <option value="">Auto-Detect Active (Optimal)</option>
+              {availableModels
+                .filter(model => model.crop_name?.toLowerCase() === formData.crop?.toLowerCase())
+                .map(m => (
+                  <option key={m.model_id} value={m.model_id}>
+                    {m.algorithm} ({m.version}) - R²: {Number(m.r2_score).toFixed(3)} {m.active ? "★" : ""}
+                  </option>
+                ))}
             </select>
           </div>
 
@@ -226,6 +256,19 @@ export default function PredictionForm() {
               value={formData.sown_area}
               onChange={handleChange}
               placeholder="e.g., 100"
+              disabled={loading}
+            />
+          </div>
+
+          <div className="form-group">
+            <label>Production Amount</label>
+            <input
+              type="number"
+              step="0.1"
+              name="production"
+              value={formData.production}
+              onChange={handleChange}
+              placeholder="e.g., 500"
               disabled={loading}
             />
           </div>
